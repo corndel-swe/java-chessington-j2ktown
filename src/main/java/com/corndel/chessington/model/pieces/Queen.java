@@ -41,37 +41,46 @@ public class Queen implements Piece {
     int totalCol = board.getBoard()[0].length;
     int totalRow = board.getBoard().length;
 
-    int currentRow = from.getRow();
-    int currentCol = from.getCol();
+    var directions = new int[][]{
+            {-1, 0},
+            {-1, 1},
+            {-1, -1},
+            {1, 0},
+            {1, 1},
+            {1, -1},
+            {0, -1},
+            {0, 1},
+    };
 
-    System.out.println("current row = ");
-    System.out.println(currentRow);
-    System.out.println("current col = ");
-    System.out.println(currentCol);
 
+    for (int[] direction : directions) {
+      int currentRow = from.getRow();
+      int currentCol = from.getCol();
+      int rowDelta = direction[0];
+      int colDelta = direction[1];
 
-    //vert
-    for (int c = 0; c < totalCol ; c++) {
-      if (c != currentCol) {
-        System.out.println("adding"+ currentRow + c);
-        allowedMoves.add(new Move(from, new Coordinates(currentRow, c)));
-        System.out.println();
+      while (true) {
+        currentRow += rowDelta;
+        currentCol += colDelta;
+
+        // check if out of bounds
+        if (currentRow < 0 || currentRow >= totalRow || currentCol < 0 || currentCol >= totalCol) {
+          break;
+        }
+
+        // check if there is a piece there. If there is check if its same colour
+        Coordinates location = new Coordinates(currentRow, currentCol);
+        Piece piece = board.get(location);
+        if (piece != null) {
+          if (piece.getColour() != this.getColour()) {
+            allowedMoves.add(new Move(from, location));
+          }
+          break;
+        }
+        allowedMoves.add(new Move(from, location));
       }
     }
-    System.out.println(allowedMoves);
-    for (int r = 0; r < totalRow ; r++) {
-      if (r != currentCol) {
-        System.out.println("adding"+ currentRow + r);
-        allowedMoves.add(new Move(from, new Coordinates(r, currentRow)));
-        System.out.println();
-      }
-    }
-    System.out.println(allowedMoves);
-    //horizon
-
-
-
-    // TODO Implement this!
     return allowedMoves;
   }
 }
+

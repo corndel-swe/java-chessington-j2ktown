@@ -37,7 +37,6 @@ public class Rook implements Piece {
 
   @Override
   public List<Move> getAllowedMoves(Coordinates from, Board board) {
-    // TODO Implement this!
     var allowedMoves = new ArrayList<Move>();
 
     int totalCol = board.getBoard()[0].length;
@@ -45,40 +44,48 @@ public class Rook implements Piece {
     int currentRow = from.getRow();
     int currentCol = from.getCol();
 
-    var q = new ArrayList<List<Object>>(Arrays.asList(
-            Arrays.asList(currentRow, currentCol + 1, "E"),
-            Arrays.asList(currentRow, currentCol - 1, "W"),
-            Arrays.asList(currentRow + 1, currentCol, "N"),
-            Arrays.asList(currentRow - 1, currentCol, "S")
-    ));
+    // Initialize directions with their row and column deltas
+    var directions = new int[][]{
+            {0, 1},   // East
+            {0, -1},  // West
+            {1, 0},   // South
+            {-1, 0}   // North
+    };
 
-    while (q.size() > 0) {
-      for (List<Object> direction : q) {
-        int rowMove = (int) direction.get(0);
-        int colMove = (int) direction.get(1);
-        String direc = direction.get(1).toString();
+    // Process each direction
+    for (int[] direction : directions) {
+      int rowDelta = direction[0];
+      int colDelta = direction[1];
+      int rowMove = currentRow;
+      int colMove = currentCol;
 
+      // Continue moving in the current direction until we hit an edge
+      while (true) {
+        rowMove += rowDelta;
+        colMove += colDelta;
 
-        if ((rowMove >= 0 && rowMove < totalRow) && (colMove >= 0 && colMove < totalCol)) { //IF INBOUNDS
-          Coordinates frontCoordinates = new Coordinates(rowMove, currentCol);
-          Piece frontPiece = board.get(frontCoordinates);
-          if (frontPiece != null) {  // A piece is found
-            allowedMoves.add(new Move(from, frontCoordinates));
-          } else {
-            allowedMoves.add(new Move(from, frontCoordinates));
-            if (direc == "S") {
-              q.add(Arrays.asList(currentRow + 1, currentCol, "S"));
-            } else if (direc == "N") {
-              q.add(Arrays.asList(currentRow - 1, currentCol, "N"));
-            } else if (direc == "W") {
-              q.add(Arrays.asList(currentRow, currentCol - 1, "W"));
-            } else if (direc == "S") {
-              q.add(Arrays.asList(currentRow, currentCol + 1, "E"));
-            }
-          }
+        // Check if the new position is within bounds
+        if (rowMove < 0 || rowMove >= totalRow || colMove < 0 || colMove >= totalCol) {
+          break; // Out of bounds, stop moving in this direction
         }
+
+        Coordinates newCoordinates = new Coordinates(rowMove, colMove);
+        Piece targetPiece = board.get(newCoordinates);
+
+        if (targetPiece != null) {
+          // If the target piece is an opponent, we can capture it
+          if (targetPiece.getColour() != this.getColour()) {
+            allowedMoves.add(new Move(from, newCoordinates)); // Add capture move
+          }
+          break; // Stop moving in this direction after hitting a piece
+        }
+
+        // If the square is empty, we can move there
+        allowedMoves.add(new Move(from, newCoordinates));
       }
     }
+
     return allowedMoves;
   }
 }
+
