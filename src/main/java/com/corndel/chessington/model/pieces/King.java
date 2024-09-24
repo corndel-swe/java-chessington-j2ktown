@@ -52,7 +52,13 @@ public class King implements Piece {
             Arrays.asList(1, -1)
     ));
 
+    int totalCol = board.getBoard()[0].length;
+    int totalRow = board.getBoard().length;
+
     for (List<Integer> direction : directions){
+      int rowMove = direction.get(0);
+      int colMove = direction.get(0);
+      if ((rowMove >= 0 && rowMove < totalRow) && (colMove >= 0 && colMove < totalCol))
       allowedMoves.add(new Move(from, from.plus(direction.get(0), direction.get(1))));
     }
 
