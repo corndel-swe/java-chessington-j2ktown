@@ -6,29 +6,31 @@ import com.corndel.chessington.model.Move;
 import com.corndel.chessington.model.PlayerColour;
 import java.util.List;
 
-public class Bishop implements Piece {
+public class Bishop extends AbstractPiece {
 
-  private final Piece.PieceType type;
-  protected final PlayerColour colour;
+//  private final Piece.PieceType type;
+//  protected final PlayerColour colour;
 
   public Bishop(PlayerColour colour) {
-    this.type = PieceType.BISHOP;
-    this.colour = colour;
+    super(PieceType.BISHOP, colour);
+    //this.type = PieceType.BISHOP;
+    //this.colour = colour;
   }
 
   @Override
   public Piece.PieceType getType() {
-    return type;
+    return super.getType();
   }
 
   @Override
   public PlayerColour getColour() {
-    return colour;
+    return super.colour;
   }
 
   @Override
   public String toString() {
-    return colour.toString() + " " + type.toString();
+    PlayerColour colour = super.getColour();
+    return colour.toString() + " " + colour.toString();
   }
 
   @Override

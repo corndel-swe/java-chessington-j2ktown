@@ -4,6 +4,9 @@ import com.corndel.chessington.model.Board;
 import com.corndel.chessington.model.Coordinates;
 import com.corndel.chessington.model.Move;
 import com.corndel.chessington.model.PlayerColour;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class King implements Piece {
@@ -35,6 +38,31 @@ public class King implements Piece {
   @Override
   public List<Move> getAllowedMoves(Coordinates from, Board board) {
     // TODO Implement this!
-    return List.of();
+
+    var allowedMoves = new ArrayList<Move>();
+    //if (getColour().equals(PlayerColour.WHITE)) {
+    var directions = new ArrayList<List<Integer>>(Arrays.asList(
+            Arrays.asList(1, 0),
+            Arrays.asList(1, 1),
+            Arrays.asList(0, 1),
+            Arrays.asList(-1, 0),
+            Arrays.asList(-1, -1),
+            Arrays.asList(-1, 1),
+            Arrays.asList(-1, 1),
+            Arrays.asList(1, -1)
+    ));
+
+    int totalCol = board.getBoard()[0].length;
+    int totalRow = board.getBoard().length;
+
+    for (List<Integer> direction : directions){
+      int rowMove = direction.get(0);
+      int colMove = direction.get(0);
+      if ((rowMove >= 0 && rowMove < totalRow) && (colMove >= 0 && colMove < totalCol))
+      allowedMoves.add(new Move(from, from.plus(direction.get(0), direction.get(1))));
+    }
+
+    return allowedMoves;
+
   }
 }
