@@ -10,5 +10,27 @@ public class Maths {
         return b;
     }
 
+    public static int round(double number) {
+        int floor = (int) number;
+
+        if (floor == number){
+            return floor;
+        }
+
+        double remainder = number - floor;
+        if (remainder >= 0.5){
+            return floor + 1;
+        }
+
+        return floor;
+    }
+
+    public static double absolute(double number){
+        if (number < 0){
+            number *= -1;
+        }
+        return number;
+    }
+
 
 }
